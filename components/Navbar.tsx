@@ -75,13 +75,12 @@ export function Navbar() {
       searchInputRef.current.focus();
     }
   }, [showSearch]);
-
   const mainNavLinks = [
     { href: '/', label: 'Home' },
     { href: '/ufc', label: 'UFC' },
-    { href: '/ufc-fighters', label: 'UFC Fighters' },
-    { href: '/the-ultimate-fighter-episode', label: 'Ultimate Fighter Episode' },
+    { href: '/fight-simulator-ai/', label: 'UFC Fight Simulator' },
     { href: '/ufc-wallpaper', label: 'Wallpaper' },
+    { href: '/ufc-fighters', label: 'UFC Fighters' },
     { href: '/one-championship', label: 'ONE Championship' },
     { href: '/all-videos', label: 'All Videos' },
   ];
