@@ -81,9 +81,8 @@ export function Navbar() {
     { href: '/ufc', label: 'UFC' },
     { href: '/ufc-fighters', label: 'UFC Fighters' },
     { href: '/the-ultimate-fighter-episode', label: 'Ultimate Fighter Episode' },
+    { href: '/ufc-wallpaper', label: 'Wallpaper' },
     { href: '/one-championship', label: 'ONE Championship' },
-    { href: '/bellator', label: 'Bellator' },
-    { href: '/pfl', label: 'PFL' },
     { href: '/all-videos', label: 'All Videos' },
   ];
 
