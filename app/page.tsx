@@ -51,7 +51,7 @@ export default function Home() {
           setVideos(allVideosData);
           setRecentVideos(allVideosData.slice(0, 20));
 
-          const specificFeaturedVideo = allVideosData.find(video => video.id === "201b4221-dddb-47bb-99b8-52c451c862bd");
+          const specificFeaturedVideo = allVideosData.find(video => video.id === "b75ccb2f-2d46-42f7-b4d2-a51d96e7a534");
           if (specificFeaturedVideo) {
             setFeaturedVideos([specificFeaturedVideo]);
           } else {
