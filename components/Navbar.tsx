@@ -109,9 +109,6 @@ export function Navbar() {
         isScrolled ? 'bg-[#141414] backdrop-blur-md' : 'bg-transparent'
       } transition-colors duration-300`}
     >
-       <div className="w-full bg-[#E50914] text-white text-center text-sm py-2 px-4 font-medium">
-        This website is for sell, please contact at <a href="mailto:mularenatiket@gmail.com" className="underline">mularenatiket@gmail.com</a>
-      </div>
       {/* Desktop Navigation */}
       <div className="flex items-center justify-between px-4 py-4 md:px-12">
         <div className="flex items-center gap-8">
