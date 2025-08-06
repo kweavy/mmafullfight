@@ -13,18 +13,45 @@ const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://mmawatch.com";
 
 export const dynamic = "force-static";
 
-export async function generateStaticParams() {
-  const res = await fetch(`${BASE_API}?get_wallpapers=1&page=1&count=1000&order=ORDER BY g.id DESC&filter=1=1`);
-  const json = await res.json();
-  const wallpapers = json?.posts || [];
+// export async function generateStaticParams() {
+//   const res = await fetch(`${BASE_API}?get_wallpapers=1&page=1&count=1000&order=ORDER BY g.id DESC&filter=1=1`);
+//   const json = await res.json();
+//   const wallpapers = json?.posts || [];
 
-  return wallpapers.map((wp: any) => {
-    const rawSlug = `${wp.image_name.replace(/\s+/g, '-').toLowerCase()}-${wp.last_update?.split(' ')[0]}`;
-    return {
-      slug: encodeURIComponent(rawSlug), // ✅ penting
-    };
-  });
+//   return wallpapers.map((wp: any) => {
+//     const rawSlug = `${wp.image_name.replace(/\s+/g, '-').toLowerCase()}-${wp.last_update?.split(' ')[0]}`;
+//     return {
+//       slug: encodeURIComponent(rawSlug), // ✅ penting
+//     };
+//   });
+// }
+
+export async function generateStaticParams() {
+  try {
+    const res = await fetch(`${BASE_API}?get_wallpapers=1&page=1&count=1000&order=ORDER BY g.id DESC&filter=1=1`, {
+      cache: 'no-store',
+    });
+
+    if (!res.ok) {
+      console.error('Failed to fetch wallpapers list:', res.status);
+      return [];
+    }
+
+    const json = await res.json();
+    const wallpapers = json?.posts || [];
+
+    return wallpapers.map((wp: any) => {
+      const rawSlug = `${wp.image_name.replace(/\s+/g, '-').toLowerCase()}-${wp.last_update?.split(' ')[0]}`;
+      return {
+        slug: encodeURIComponent(rawSlug),
+      };
+    });
+  } catch (error) {
+    console.error('Error in generateStaticParams:', error);
+    return [];
+  }
 }
+
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const decodedSlug = decodeURIComponent(params.slug); // ✅ decode
