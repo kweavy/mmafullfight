@@ -12,6 +12,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FastAverageColor } from 'fast-average-color';
 import { VideoSkeleton } from '@/components/VideoSkeleton';
 import { VideoSliderGrid } from '@/components/VideoSliderGrid';
+import AdsterraBanner from '@/components/AdsterraBanner';
+import AdsterraNativeBanner from '@/components/AdsterraNativeBanner';
 import Script from 'next/script';
 
 interface Video {
@@ -175,9 +177,9 @@ export default function Home() {
               transition={{ duration: 0.3 }}
               className="relative h-[85vh] w-full group"
             >
-              <div 
+              <div
                 className="absolute inset-0 bg-cover bg-center"
-                style={{ 
+                style={{
                   backgroundImage: `url(${featuredVideos[currentFeaturedIndex].thumbnail})`,
                   filter: 'brightness(0.7)'
                 }}
@@ -201,7 +203,7 @@ export default function Home() {
                 <ChevronRight className="w-6 h-6 text-white" />
               </button>
               <div className="absolute bottom-[20%] left-[5%] max-w-2xl">
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
@@ -213,7 +215,7 @@ export default function Home() {
                     {featuredVideos[currentFeaturedIndex].description}
                   </p>
                   <div className="flex items-center gap-4">
-                    <Button 
+                    <Button
                       size="lg"
                       className="bg-[#E50914] text-white hover:bg-[#E50914]/90 px-8 rounded-full"
                       onClick={() => router.push(`/video/${featuredVideos[currentFeaturedIndex].slug}`)}
@@ -221,7 +223,7 @@ export default function Home() {
                       <Play className="mr-2 h-5 w-5" />
                       Watch Now
                     </Button>
-                    <Button 
+                    <Button
                       size="lg"
                       variant="outline"
                       className="bg-white/20 text-white hover:bg-white/30 px-8 rounded-full backdrop-blur-sm"
@@ -238,9 +240,8 @@ export default function Home() {
                   <button
                     key={index}
                     onClick={() => setCurrentFeaturedIndex(index)}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
-                      index === currentFeaturedIndex ? 'w-8 bg-[#E50914]' : 'w-2 bg-white/50'
-                    }`}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${index === currentFeaturedIndex ? 'w-8 bg-[#E50914]' : 'w-2 bg-white/50'
+                      }`}
                   />
                 ))}
               </div>
@@ -251,9 +252,9 @@ export default function Home() {
 
 
         <div className="flex justify-center my-10">
-  {/* Script Config */}
-  <Script id="mmafullfight-banner-config" strategy="afterInteractive">
-    {`
+          {/* Script Config */}
+          <Script id="mmafullfight-banner-config" strategy="afterInteractive">
+            {`
       atOptions = {
         'key' : 'bf10227b0c62864d2cd4a5a2f8477de9',
         'format' : 'iframe',
@@ -262,14 +263,14 @@ export default function Home() {
         'params' : {}
       };
     `}
-  </Script>
+          </Script>
 
-  {/* Script Loader */}
-  <Script
-    strategy="afterInteractive"
-    src="//www.highperformanceformat.com/bf10227b0c62864d2cd4a5a2f8477de9/invoke.js"
-  />
-</div>
+          {/* Script Loader */}
+          <Script
+            strategy="afterInteractive"
+            src="//www.highperformanceformat.com/bf10227b0c62864d2cd4a5a2f8477de9/invoke.js"
+          />
+        </div>
 
         <div className="relative z-10 -mt-32 pb-20">
           <div className="container mx-auto px-6">
@@ -278,38 +279,38 @@ export default function Home() {
                 <TrendingUp className="w-6 h-6 text-[#E50914]" />
                 <h2 className="text-2xl font-bold text-white">Trending Now</h2>
               </div>
-                             {/* Adsterra Banner */}
-  <div className="mb-10 text-center">
-              <div ref={adRef} id="container-17ff9c6569cbd48e106a4c3250b9972f" />
-            </div>
+              {/* Adsterra Banner */}
+              <div className="mb-10 text-center">
+                <div ref={adRef} id="container-17ff9c6569cbd48e106a4c3250b9972f" />
+              </div>
               <VideoSlider title='' videos={trendingVideos} />
             </section>
 
 
-    {/* Iklan Adsterra Tengah */}
-    <div className="mb-12 flex justify-center">
-      <Script
-        strategy="afterInteractive"
-        async
-        data-cfasync="false"
-        src="//pl26378347.profitableratecpm.com/17ff9c6569cbd48e106a4c3250b9972f/invoke.js"
-      />
-      <div id="container-17ff9c6569cbd48e106a4c3250b9972f" className="w-full max-w-screen-md" />
-    </div>
+            {/* Iklan Adsterra Tengah */}
+            <div className="mb-12 flex justify-center">
+              <Script
+                strategy="afterInteractive"
+                async
+                data-cfasync="false"
+                src="//pl26378347.profitableratecpm.com/17ff9c6569cbd48e106a4c3250b9972f/invoke.js"
+              />
+              <div id="container-17ff9c6569cbd48e106a4c3250b9972f" className="w-full max-w-screen-md" />
+            </div>
 
             <section className="mb-12">
               <div className="flex items-center gap-3 mb-6">
                 <Clock className="w-6 h-6 text-[#E50914]" />
                 <h2 className="text-2xl font-bold text-white">Recent Uploads</h2>
               </div>
- 
+
 
               <VideoSliderGrid title="" videos={recentVideos} />
             </section>
 
 
 
-          
+
           </div>
         </div>
       </main>

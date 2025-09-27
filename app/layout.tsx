@@ -1,7 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import Script from 'next/script'; 
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -78,19 +78,20 @@ export default function RootLayout({
           }}
         />
 
-        {/* Adsterra Popupunder */}
+        {/* Adsterra Popunder - Di dalam <head> */}
         <Script
           strategy="afterInteractive"
-          src="//pl26378326.profitableratecpm.com/d6/9f/02/d69f02efd7c105444200dd1d7de34ee9.js"
-        />
-         {/* ✅ Adsterra Banner or Interstitial */}
-        <Script
-          strategy="afterInteractive"
-          src="//pl26433739.profitableratecpm.com/48/62/60/4862606d1a3cf67d461a8aacaf13bb07.js"
+          src="//weptnastyturmoil.com/d6/9f/02/d69f02efd7c105444200dd1d7de34ee9.js"
         />
       </head>
       <body className={`${inter.className} bg-black`}>
         {children}
+
+        {/* Adsterra Banner/Interstitial - Sebelum closing </body> */}
+        <Script
+          strategy="afterInteractive"
+          src="//weptnastyturmoil.com/48/62/60/4862606d1a3cf67d461a8aacaf13bb07.js"
+        />
       </body>
     </html>
   );
