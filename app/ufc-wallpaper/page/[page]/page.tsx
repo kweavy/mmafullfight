@@ -3,8 +3,8 @@ import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 import PopularSearches from "@/components/PopularSearches";
 
-const BASE_API = "https://templatecreative.com/android/conormcgregor/api/v1/api.php";
-const IMAGE_BASE = "https://templatecreative.com/android/conormcgregor/upload/";
+const BASE_API = "https://ufcwallpaper.my.id/android/conormcgregor/api/v1/api.php";
+const IMAGE_BASE = "https://ufcwallpaper.my.id/android/conormcgregor/upload/";
 const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || "MMA Wallpapers";
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://mmawatch.com";
 
@@ -158,11 +158,10 @@ export default async function Page({ params }: { params: { page: string } }) {
               <Link
                 key={p}
                 href={`/ufc-wallpaper/page/${p}`}
-                className={`px-4 py-2 rounded-md font-semibold ${
-                  p === page
-                    ? "bg-[#E50914] text-white"
-                    : "bg-[#1a1a1a] text-gray-300 hover:bg-[#E50914]/20"
-                }`}
+                className={`px-4 py-2 rounded-md font-semibold ${p === page
+                  ? "bg-[#E50914] text-white"
+                  : "bg-[#1a1a1a] text-gray-300 hover:bg-[#E50914]/20"
+                  }`}
               >
                 {p}
               </Link>
