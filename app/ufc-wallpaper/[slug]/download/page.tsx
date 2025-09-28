@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 
-const IMAGE_BASE = "https://templatecreative.com/android/conormcgregor/upload/";
+const IMAGE_BASE = "https://ufcwallpaper.my.id/android/conormcgregor/upload/";
 
 export default async function DownloadPage({ params }: { params: { slug: string } }) {
-  const res = await fetch(`https://templatecreative.com/android/conormcgregor/api/v1/api.php?get_wallpaper_by_slug=1&slug=${params.slug}`, {
+  const res = await fetch(`https://ufcwallpaper.my.id/android/conormcgregor/api/v1/api.php?get_wallpaper_by_slug=1&slug=${params.slug}`, {
     cache: "no-store",
   });
 

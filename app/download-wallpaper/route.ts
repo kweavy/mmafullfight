@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
     return new Response("Missing file parameter", { status: 400 });
   }
 
-  const fileUrl = `https://templatecreative.com/android/conormcgregor/upload/${fileName}`;
+  const fileUrl = `https://ufcwallpaper.my.id/android/conormcgregor/upload/${fileName}`;
 
   const externalRes = await fetch(fileUrl);
   const fileBuffer = await externalRes.arrayBuffer();

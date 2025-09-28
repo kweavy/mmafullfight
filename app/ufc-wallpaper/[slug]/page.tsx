@@ -6,8 +6,8 @@ import Link from "next/link";
 import Script from "next/script";
 import { ChevronLeft, DownloadCloud, Eye } from "lucide-react";
 
-const BASE_API = "https://templatecreative.com/android/conormcgregor/api/v1/api.php";
-const IMAGE_BASE = "https://templatecreative.com/android/conormcgregor/upload/";
+const BASE_API = "https://ufcwallpaper.my.id/android/conormcgregor/api/v1/api.php";
+const IMAGE_BASE = "https://ufcwallpaper.my.id/android/conormcgregor/upload/";
 const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || "MMA Wallpapers";
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://mmawatch.com";
 
@@ -137,12 +137,12 @@ export default async function WallpaperDetailPage({ params }: { params: { slug: 
     <>
       <Navbar />
       <div className="min-h-screen bg-black text-white relative pt-20">
-        <div 
-          className="absolute inset-0 bg-cover bg-center blur-xl opacity-30" 
-          style={{ backgroundImage: `url(${IMAGE_BASE}${wp.image_upload})` }} 
+        <div
+          className="absolute inset-0 bg-cover bg-center blur-xl opacity-30"
+          style={{ backgroundImage: `url(${IMAGE_BASE}${wp.image_upload})` }}
         />
-        <Link 
-          href="/ufc-wallpaper" 
+        <Link
+          href="/ufc-wallpaper"
           className="fixed top-24 left-4 z-20 text-white hover:text-[#E50914] flex items-center"
         >
           <ChevronLeft className="mr-2 h-6 w-6" />

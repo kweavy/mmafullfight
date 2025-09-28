@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 
-const BASE_API = "https://templatecreative.com/android/conormcgregor/api/v1/api.php";
-const IMAGE_BASE = "https://templatecreative.com/android/conormcgregor/upload/";
+const BASE_API = "https://ufcwallpaper.my.id/android/conormcgregor/api/v1/api.php";
+const IMAGE_BASE = "https://ufcwallpaper.my.id/android/conormcgregor/upload/";
 const ADSTERRA_LINK = "https://www.profitableratecpm.com/dkkehrkgn?key=883fc888d7571cc5f949ab2b43dc1549";
 
 export default async function UnlockPage({ params }: { params: { slug: string } }) {
@@ -29,12 +29,12 @@ export default async function UnlockPage({ params }: { params: { slug: string } 
 
       <h2 className="text-lg mt-8">Step 2: Download Your Wallpaper</h2>
 
-     <a
-  href={`/download-wallpaper?file=${wp.image_upload}`}
-  className="bg-[#E50914] hover:bg-[#c40810] px-6 py-3 rounded-full text-white font-bold"
->
-  📥 Download Wallpaper
-</a>
+      <a
+        href={`/download-wallpaper?file=${wp.image_upload}`}
+        className="bg-[#E50914] hover:bg-[#c40810] px-6 py-3 rounded-full text-white font-bold"
+      >
+        📥 Download Wallpaper
+      </a>
 
     </div>
   );
