@@ -5,8 +5,8 @@ import TrackSearch from "@/components/TrackSearch";
 import PopularSearches from "@/components/PopularSearches";
 import { supabaseServer } from "@/lib/supabaseServer";
 
-const BASE_API = "https://templatecreative.com/android/conormcgregor/api/v1/api.php";
-const IMAGE_BASE = "https://templatecreative.com/android/conormcgregor/upload/";
+const BASE_API = "https://ufcwallpaper.my.id/android/conormcgregor/api/v1/api.php";
+const IMAGE_BASE = "https://ufcwallpaper.my.id/android/conormcgregor/upload/";
 const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || "MMA Wallpapers";
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://mmawatch.com";
 
