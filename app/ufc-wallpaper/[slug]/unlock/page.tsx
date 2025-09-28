@@ -5,14 +5,27 @@ const IMAGE_BASE = "https://ufcwallpaper.my.id/android/conormcgregor/upload/";
 const ADSTERRA_LINK = "https://www.profitableratecpm.com/dkkehrkgn?key=883fc888d7571cc5f949ab2b43dc1549";
 
 export default async function UnlockPage({ params }: { params: { slug: string } }) {
-  const res = await fetch(`${BASE_API}?get_wallpaper_by_slug=1&slug=${params.slug}`, {
-    cache: "no-store",
-  });
+  let wp;
 
-  const json = await res.json();
-  const wp = json?.wallpaper;
+  try {
+    const res = await fetch(`${BASE_API}?get_wallpaper_by_slug=1&slug=${params.slug}`, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(8000), // 8 detik timeout
+    });
 
-  if (!wp) return notFound();
+    if (!res.ok) {
+      console.error(`Failed to fetch wallpaper for unlock: ${res.status}`);
+      return notFound();
+    }
+
+    const json = await res.json();
+    wp = json?.wallpaper;
+
+    if (!wp) return notFound();
+  } catch (error) {
+    console.error("Error in unlock page:", error);
+    return notFound();
+  }
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-4 py-16 space-y-6">

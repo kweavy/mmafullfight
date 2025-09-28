@@ -30,6 +30,7 @@ export async function generateStaticParams() {
   try {
     const res = await fetch(`${BASE_API}?get_wallpapers=1&page=1&count=1000&order=ORDER BY g.id DESC&filter=1=1`, {
       cache: 'no-store',
+      signal: AbortSignal.timeout(8000), // 8 detik timeout
     });
 
     if (!res.ok) {
@@ -54,84 +55,107 @@ export async function generateStaticParams() {
 
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const decodedSlug = decodeURIComponent(params.slug); // ✅ decode
-  const res = await fetch(`${BASE_API}?get_wallpaper_by_slug=1&slug=${encodeURIComponent(decodedSlug)}`, {
-    cache: "no-store",
-  });
-
-  let json;
   try {
-    json = await res.json();
-  } catch {
-    return {};
-  }
+    const decodedSlug = decodeURIComponent(params.slug); // ✅ decode
+    const res = await fetch(`${BASE_API}?get_wallpaper_by_slug=1&slug=${encodeURIComponent(decodedSlug)}`, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(8000), // 8 detik timeout
+    });
 
-  const wp = json?.wallpaper;
-  if (!wp) return {};
+    if (!res.ok) {
+      console.error(`Failed to fetch wallpaper metadata: ${res.status}`);
+      return {
+        title: "UFC Wallpaper HD & 4K Download",
+        description: "Download high-quality UFC wallpapers for your devices.",
+      };
+    }
 
-  const title = `${wp.image_name} UFC Wallpaper HD & 4K Download (iPhone, PC, Laptop) | ${SITE_NAME}`;
-  const description = `Download ${wp.image_name} UFC wallpaper in HD and 4K resolution. Optimized for iPhone, PC, laptop, and mobile devices. Get the best fighter backgrounds including ${wp.category_name}.`;
+    const json = await res.json();
+    const wp = json?.wallpaper;
+    if (!wp) {
+      return {
+        title: "UFC Wallpaper HD & 4K Download",
+        description: "Download high-quality UFC wallpapers for your devices.",
+      };
+    }
 
-  const slugUrl = `${BASE_URL}/ufc-wallpaper/${params.slug}`;
+    const title = `${wp.image_name} UFC Wallpaper HD & 4K Download (iPhone, PC, Laptop) | ${SITE_NAME}`;
+    const description = `Download ${wp.image_name} UFC wallpaper in HD and 4K resolution. Optimized for iPhone, PC, laptop, and mobile devices. Get the best fighter backgrounds including ${wp.category_name}.`;
 
-  return {
-    title,
-    description,
-    metadataBase: new URL(BASE_URL),
-    alternates: {
-      canonical: slugUrl,
-    },
-    openGraph: {
+    const slugUrl = `${BASE_URL}/ufc-wallpaper/${params.slug}`;
+
+    return {
       title,
       description,
-      url: slugUrl,
-      siteName: SITE_NAME,
-      type: "website",
-      images: [
-        {
-          url: `${IMAGE_BASE}${wp.image_upload}`,
-          alt: `${wp.image_name} UFC wallpaper HD & 4K`,
-        },
+      metadataBase: new URL(BASE_URL),
+      alternates: {
+        canonical: slugUrl,
+      },
+      openGraph: {
+        title,
+        description,
+        url: slugUrl,
+        siteName: SITE_NAME,
+        type: "website",
+        images: [
+          {
+            url: `${IMAGE_BASE}${wp.image_upload}`,
+            alt: `${wp.image_name} UFC wallpaper HD & 4K`,
+          },
+        ],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+        images: [`${IMAGE_BASE}${wp.image_upload}`],
+      },
+      keywords: [
+        `${wp.image_name} wallpaper`,
+        "ufc wallpaper hd",
+        "ufc wallpaper 4k",
+        "ufc wallpaper 4k iphone",
+        "ufc wallpaper for laptop",
+        "ufc wallpaper khamzat chimaev",
+        "ufc wallpaper pc 4k",
+        "ufc wallpaper 4k phone",
+        "ufc wallpaper islam",
+        "ufc wallpaper 4k laptop",
+        "download ufc wallpaper",
+        `${wp.category_name} fighter wallpaper`,
       ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [`${IMAGE_BASE}${wp.image_upload}`],
-    },
-    keywords: [
-      `${wp.image_name} wallpaper`,
-      "ufc wallpaper hd",
-      "ufc wallpaper 4k",
-      "ufc wallpaper 4k iphone",
-      "ufc wallpaper for laptop",
-      "ufc wallpaper khamzat chimaev",
-      "ufc wallpaper pc 4k",
-      "ufc wallpaper 4k phone",
-      "ufc wallpaper islam",
-      "ufc wallpaper 4k laptop",
-      "download ufc wallpaper",
-      `${wp.category_name} fighter wallpaper`,
-    ],
-  };
+    };
+  } catch (error) {
+    console.error("Error in generateMetadata:", error);
+    return {
+      title: "UFC Wallpaper HD & 4K Download",
+      description: "Download high-quality UFC wallpapers for your devices.",
+    };
+  }
 }
 
 export default async function WallpaperDetailPage({ params }: { params: { slug: string } }) {
-  const decodedSlug = decodeURIComponent(params.slug); // ✅ decode
-  const res = await fetch(`${BASE_API}?get_wallpaper_by_slug=1&slug=${encodeURIComponent(decodedSlug)}`, {
-    cache: "no-store",
-  });
+  let wp;
 
-  let json;
   try {
-    json = await res.json();
-  } catch {
+    const decodedSlug = decodeURIComponent(params.slug); // ✅ decode
+    const res = await fetch(`${BASE_API}?get_wallpaper_by_slug=1&slug=${encodeURIComponent(decodedSlug)}`, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(8000), // 8 detik timeout
+    });
+
+    if (!res.ok) {
+      console.error(`Failed to fetch wallpaper: ${res.status}`);
+      return notFound();
+    }
+
+    const json = await res.json();
+    wp = json?.wallpaper;
+    if (!wp) return notFound();
+  } catch (error) {
+    console.error("Error fetching wallpaper:", error);
     return notFound();
   }
-
-  const wp = json?.wallpaper;
-  if (!wp) return notFound();
 
   return (
     <>

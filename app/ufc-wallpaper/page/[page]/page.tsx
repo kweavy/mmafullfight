@@ -64,12 +64,27 @@ export default async function Page({ params }: { params: { page: string } }) {
   const page = parseInt(params.page) || 1;
   const limit = 20;
 
-  const res = await fetch(
-    `${BASE_API}?get_wallpapers=1&page=${page}&count=${limit}&order=ORDER BY g.id DESC&filter=1=1`,
-    { cache: "no-store" }
-  );
-  const json = await res.json();
-  const wallpapers = json?.posts || [];
+  let wallpapers = [];
+
+  try {
+    const res = await fetch(
+      `${BASE_API}?get_wallpapers=1&page=${page}&count=${limit}&order=ORDER BY g.id DESC&filter=1=1`,
+      {
+        cache: "no-store",
+        signal: AbortSignal.timeout(8000) // 8 detik timeout
+      }
+    );
+
+    if (!res.ok) {
+      console.error(`Failed to fetch wallpapers: ${res.status}`);
+    } else {
+      const json = await res.json();
+      wallpapers = json?.posts || [];
+    }
+  } catch (error) {
+    console.error("Error fetching wallpapers:", error);
+    wallpapers = [];
+  }
 
   const totalPages = 10;
 

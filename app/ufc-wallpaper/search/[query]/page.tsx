@@ -5,84 +5,117 @@ import TrackSearch from "@/components/TrackSearch";
 import PopularSearches from "@/components/PopularSearches";
 import { supabaseServer } from "@/lib/supabaseServer";
 
-const BASE_API = "https://ufcwallpaper.my.id/android/conormcgregor/api/v1/api.php";
-const IMAGE_BASE = "https://ufcwallpaper.my.id/android/conormcgregor/upload/";
+const BASE_API = process.env.UFC_WALLPAPER_API_BASE_URL || "https://ufcwallpaper.my.id/android/conormcgregor/api/v1/api.php";
+const IMAGE_BASE = process.env.UFC_WALLPAPER_IMAGE_BASE_URL || "https://ufcwallpaper.my.id/android/conormcgregor/upload/";
 const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || "MMA Wallpapers";
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://mmawatch.com";
+const SKIP_API_DURING_BUILD = process.env.SKIP_EXTERNAL_API_DURING_BUILD === 'true';
 
 export const dynamic = "force-static";
 
 // ✅ Static paths dari Supabase
 export async function generateStaticParams() {
-  const { data, error } = await supabaseServer
-    .from("search_keywords")
-    .select("slug")
-    .order("count", { ascending: false })
-    .limit(50);
+  try {
+    const { data, error } = await supabaseServer
+      .from("search_keywords")
+      .select("slug")
+      .order("count", { ascending: false })
+      .limit(50);
 
-  if (error) {
-    console.error("Supabase error in generateStaticParams:", error.message);
+    if (error) {
+      console.error("Supabase error in generateStaticParams:", error.message);
+      return [];
+    }
+
+    return (data || []).map((item) => ({
+      query: item.slug,
+    }));
+  } catch (error) {
+    console.error("Error in generateStaticParams:", error);
     return [];
   }
-
-  return (data || []).map((item) => ({
-    query: item.slug,
-  }));
 }
 
 export async function generateMetadata({ params }: { params: { query: string } }): Promise<Metadata> {
-  const keyword = decodeURIComponent(params.query);
-  const keywordCap = keyword.replace(/\b\w/g, (c) => c.toUpperCase());
+  try {
+    const keyword = decodeURIComponent(params.query);
+    const keywordCap = keyword.replace(/\b\w/g, (c) => c.toUpperCase());
 
-  const title = `${keywordCap} - Download Free UFC Wallpaper HD & 4K for PC, Phone & Laptop | ${SITE_NAME}`;
-  const description = `Download ${keywordCap} wallpaper in high resolution (HD & 4K). Free UFC fighter backgrounds for PC, iPhone, and Android.`;
+    const title = `${keywordCap} - Download Free UFC Wallpaper HD & 4K for PC, Phone & Laptop | ${SITE_NAME}`;
+    const description = `Download ${keywordCap} wallpaper in high resolution (HD & 4K). Free UFC fighter backgrounds for PC, iPhone, and Android.`;
 
-  return {
-    title,
-    description,
-    metadataBase: new URL(BASE_URL),
-    alternates: {
-      canonical: `${BASE_URL}/ufc-wallpaper/search/${params.query}`,
-    },
-    openGraph: {
+    return {
       title,
       description,
-      url: `${BASE_URL}/ufc-wallpaper/search/${params.query}`,
-      siteName: SITE_NAME,
-      type: "website",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-    },
-    keywords: [
-      keyword,
-      `${keyword} wallpaper`,
-      `${keyword} 4k`,
-      `${keyword} HD`,
-      `download ${keyword} wallpaper`,
-      "ufc wallpaper",
-      "ufc wallpaper hd",
-      "ufc wallpaper 4k",
-      "fighter wallpaper",
-      "mma background",
-    ],
-  };
+      metadataBase: new URL(BASE_URL),
+      alternates: {
+        canonical: `${BASE_URL}/ufc-wallpaper/search/${params.query}`,
+      },
+      openGraph: {
+        title,
+        description,
+        url: `${BASE_URL}/ufc-wallpaper/search/${params.query}`,
+        siteName: SITE_NAME,
+        type: "website",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+      },
+      keywords: [
+        keyword,
+        `${keyword} wallpaper`,
+        `${keyword} 4k`,
+        `${keyword} HD`,
+        `download ${keyword} wallpaper`,
+        "ufc wallpaper",
+        "ufc wallpaper hd",
+        "ufc wallpaper 4k",
+        "fighter wallpaper",
+        "mma background",
+      ],
+    };
+  } catch (error) {
+    console.error("Error in generateMetadata:", error);
+    return {
+      title: "UFC Wallpaper Search | MMA Wallpapers",
+      description: "Search and download free UFC wallpapers in HD & 4K resolution.",
+    };
+  }
 }
 
 export default async function SearchPage({ params }: { params: { query: string } }) {
   const searchTerm = decodeURIComponent(params.query);
 
-  const res = await fetch(
-    `${BASE_API}?get_search=1&search=${encodeURIComponent(searchTerm)}&order=ORDER BY g.id DESC&page=1&count=20`,
-    { cache: "no-store" }
-  );
+  let wallpapers = [];
 
-  const json = await res.json();
-  const wallpapers = json?.posts || [];
+  // Skip API call during build if environment variable is set
+  if (SKIP_API_DURING_BUILD && process.env.NODE_ENV === 'production') {
+    console.log('Skipping API call during build');
+    wallpapers = [];
+  } else {
+    try {
+      const res = await fetch(
+        `${BASE_API}?get_search=1&search=${encodeURIComponent(searchTerm)}&order=ORDER BY g.id DESC&page=1&count=20`,
+        {
+          cache: "no-store",
+          next: { revalidate: 0 },
+          signal: AbortSignal.timeout(8000) // 8 detik timeout
+        }
+      );
 
-  return (
+      if (!res.ok) {
+        console.error(`API request failed: ${res.status}`);
+      } else {
+        const json = await res.json();
+        wallpapers = json?.posts || [];
+      }
+    } catch (error) {
+      console.error("Failed to fetch wallpapers:", error);
+      wallpapers = [];
+    }
+  } return (
     <>
       <Navbar />
       <TrackSearch keyword={searchTerm} />
